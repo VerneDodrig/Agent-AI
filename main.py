@@ -15,7 +15,6 @@ def main():
         sys.exit("Please provide a prompt")
     load_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY")
-    print("Hello from agent-ai!")
     client = genai.Client(api_key=api_key)
     response = client.models.generate_content(model="gemini-2.0-flash-001", contents=messages)
     print(response.text)
