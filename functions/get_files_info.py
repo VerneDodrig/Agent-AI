@@ -6,7 +6,7 @@ def get_files_info(working_directory, directory=None):
     full_path = os.path.abspath(os.path.join(working_directory, directory))
 
     if not full_path.startswith(os.path.abspath(os.path.join(".", working_directory))):
-        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory | Directory Path: {full_path}, Prefix_Path: {os.path.abspath(os.path.join(".", working_directory))}'
+        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
     elif not os.path.isdir(full_path):
         return f'Error: "{directory}" is not a directory'
     
@@ -26,7 +26,7 @@ def get_file_content(working_directory, file_path=None):
     full_path = os.path.abspath(os.path.join(working_directory, file_path))
 
     if not full_path.startswith(os.path.abspath(os.path.join(".", working_directory))):
-        return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory | Directory Path: {full_path}, Prefix_Path: {os.path.abspath(os.path.join(".", working_directory))}'
+        return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory'
     elif not os.path.isfile(full_path):
         return f'Error: "{file_path}" is not a file'
     
@@ -46,7 +46,7 @@ def write_file(working_directory, file_path, content):
     full_path = os.path.abspath(os.path.join(working_directory, file_path))
 
     if not full_path.startswith(os.path.abspath(os.path.join(".", working_directory))):
-        return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory | Directory Path: {full_path}, Prefix_Path: {os.path.abspath(os.path.join(".", working_directory))}'
+        return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory'
 
     directory_path = os.path.dirname(full_path)
 
@@ -73,6 +73,40 @@ schema_get_files_info = types.FunctionDeclaration(
             "directory": types.Schema(
                 type=types.Type.STRING,
                 description="The directory to list files from, relative to the working directory. If not provided, lists files in the working directory itself.",
+            ),
+        },
+    ),
+)
+
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Reads the contents of a file up to 10000 characters",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path to the file to read from, relative to the working directory.",
+            ),
+        },
+    ),
+)
+
+
+schema_write_file = types.FunctionDeclaration(
+    name="write_file",
+    description="Writes or overwrites a file with a given string of content.  If a file does not exist, this will create that file and write to that file with the given content string.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path to the file to write to, relative to the working directory.",
+            ),
+            "content": types.Schema(
+                type=types.Type.STRING,
+                description="Content to write into the chosen file.",
             ),
         },
     ),
